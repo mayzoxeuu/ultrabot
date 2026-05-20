@@ -1,145 +1,1095 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>📜 SnowBot - Commandes Disponibles</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #0f0f0f;
-      color: #f0f0f0;
-      line-height: 1.6;
-      padding: 30px;
-    }
-    h1, h2 {
-      color: #00d0ff;
-    }
-    section {
-      margin-bottom: 30px;
-    }
-    .cmd {
-      background-color: #1e1e1e;
-      padding: 8px 12px;
-      margin: 5px 0;
-      border-left: 4px solid #00d0ff;
-      border-radius: 4px;
-      white-space: pre-wrap;
-    }
-    footer {
-      margin-top: 50px;
-      font-size: 0.9em;
-      color: #888;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UltraBot — 164 Commandes</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;600;700&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #e01a1a;
+    --red-dark: #9b0e0e;
+    --red-glow: #ff2a2a;
+    --bg: #050505;
+    --bg2: #0d0d0d;
+    --bg3: #111111;
+    --bg4: #161616;
+    --border: #1e1e1e;
+    --border-red: #2a0808;
+    --text: #c8c8c8;
+    --text-dim: #5a5a5a;
+    --text-bright: #f0f0f0;
+    --white: #ffffff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--red-dark); }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(5,5,5,0.96);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    height: 60px;
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 4px;
+    color: var(--white);
+  }
+  .nav-logo span { color: var(--red); }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--red); }
+
+  .nav-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--red);
+    border: 1px solid var(--red-dark);
+    padding: 4px 12px;
+    letter-spacing: 2px;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(224,26,26,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(224,26,26,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridShift 20s linear infinite;
+  }
+
+  @keyframes gridShift {
+    from { transform: translateY(0); }
+    to { transform: translateY(60px); }
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(224,26,26,0.12) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 14vw, 160px);
+    line-height: 0.9;
+    color: var(--white);
+    letter-spacing: 8px;
+    position: relative;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.4s forwards;
+  }
+
+  .hero-title .red { color: var(--red); }
+
+  .hero-title::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    color: var(--red);
+    opacity: 0.04;
+    transform: translate(4px, 4px);
+    pointer-events: none;
+  }
+
+  .hero-sub {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--text-dim);
+    margin-top: 24px;
+    letter-spacing: 1px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 64px;
+    margin-top: 64px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.8s forwards;
+  }
+
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    color: var(--red);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    margin-top: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1s forwards;
+  }
+
+  .btn-primary {
+    background: var(--red);
+    color: var(--white);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 14px 36px;
+    text-decoration: none;
+    border: 1px solid var(--red);
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: rgba(255,255,255,0.1);
+    transition: left 0.3s;
+  }
+  .btn-primary:hover::before { left: 0; }
+  .btn-primary:hover { box-shadow: 0 0 24px rgba(224,26,26,0.4); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 14px 36px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--red); color: var(--red); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ANTIRAID FEATURE SECTION */
+  .antiraid-section {
+    padding: 100px 48px;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .antiraid-section::before {
+    content: 'ANTIRAID';
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 120px;
+    color: rgba(224,26,26,0.04);
+    letter-spacing: 20px;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--red);
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(42px, 6vw, 72px);
+    color: var(--white);
+    letter-spacing: 4px;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .section-title .accent { color: var(--red); }
+
+  .antiraid-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    margin-top: 64px;
+    align-items: start;
+  }
+
+  .antiraid-text p {
+    font-size: 16px;
+    color: var(--text);
+    line-height: 1.8;
+    margin-bottom: 20px;
+    font-weight: 300;
+  }
+
+  .speed-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(224,26,26,0.08);
+    border: 1px solid var(--red-dark);
+    padding: 12px 20px;
+    margin-top: 8px;
+  }
+  .speed-badge .ms {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--red);
+    line-height: 1;
+  }
+  .speed-badge .ms-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .antiraid-features {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .ar-feature {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--red-dark);
+    padding: 20px 24px;
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .ar-feature:hover {
+    border-left-color: var(--red);
+    background: var(--bg4);
+    transform: translateX(4px);
+  }
+  .ar-feature-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--white);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .ar-feature-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-weight: 300;
+  }
+  .ar-feature-tag {
+    float: right;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    background: rgba(224,26,26,0.15);
+    color: var(--red);
+    padding: 2px 8px;
+    letter-spacing: 1px;
+  }
+
+  /* COMMANDS SECTION */
+  .commands-section {
+    padding: 100px 48px;
+  }
+
+  .commands-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  .commands-count {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--text-dim);
+    letter-spacing: 3px;
+  }
+  .commands-count span { color: var(--red); }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 2px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0;
+  }
+
+  .tab-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 12px 20px;
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active {
+    color: var(--red);
+    border-bottom-color: var(--red);
+  }
+  .tab-count {
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    font-weight: 400;
+  }
+  .tab-btn.active .tab-count { color: rgba(224,26,26,0.6); }
+  .tab-btn:hover .tab-count { color: var(--text-dim); }
+
+  /* COMMAND LIST */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .cat-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 24px;
+    padding: 12px 16px;
+    border-left: 2px solid var(--red-dark);
+    background: var(--bg2);
+    line-height: 1.7;
+  }
+  .cat-desc code {
+    color: var(--red);
+    background: rgba(224,26,26,0.08);
+    padding: 1px 5px;
+  }
+
+  .cmd-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 2px;
+  }
+
+  .cmd-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    transition: all 0.15s;
+    cursor: default;
+  }
+  .cmd-card:hover {
+    background: var(--bg3);
+    border-color: var(--red-dark);
+  }
+  .cmd-card:hover .cmd-name { color: var(--red-glow); }
+
+  .cmd-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--white);
+    font-weight: 600;
+    margin-bottom: 6px;
+    transition: color 0.15s;
+  }
+  .cmd-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  /* SEARCH */
+  .search-wrap {
+    position: relative;
+    max-width: 400px;
+    margin-bottom: 32px;
+  }
+  .cmd-search {
+    width: 100%;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--text-bright);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 12px 16px 12px 40px;
+    outline: none;
+    transition: border-color 0.2s;
+    letter-spacing: 1px;
+  }
+  .cmd-search::placeholder { color: var(--text-dim); }
+  .cmd-search:focus { border-color: var(--red-dark); }
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+
+  .no-results {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    padding: 40px 0;
+    text-align: center;
+    display: none;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 4px;
+    color: var(--white);
+  }
+  .footer-logo span { color: var(--red); }
+
+  .footer-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-align: right;
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--red-dark), transparent);
+    margin: 0;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 20px 60px; }
+    .hero-stats { gap: 32px; flex-wrap: wrap; justify-content: center; }
+    .hero-cta { flex-direction: column; align-items: center; }
+    .antiraid-section { padding: 60px 20px; }
+    .antiraid-grid { grid-template-columns: 1fr; gap: 40px; }
+    .commands-section { padding: 60px 20px; }
+    .cmd-grid { grid-template-columns: 1fr; }
+    footer { padding: 32px 20px; flex-direction: column; align-items: flex-start; }
+    .footer-text { text-align: left; }
+  }
+
+  /* PULSE ANIMATION */
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .live-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--red);
+    border-radius: 50%;
+    animation: pulse 1.5s ease infinite;
+    margin-right: 8px;
+  }
+
+  /* SCAN LINE */
+  .scan-line {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--red), transparent);
+    z-index: 200;
+    animation: scanMove 4s ease-in-out infinite;
+    opacity: 0.6;
+  }
+  @keyframes scanMove {
+    0% { top: 0; }
+    100% { top: 100vh; }
+  }
+</style>
 </head>
 <body>
-  <h1>📜 SnowBot - Commandes Disponibles</h1>
 
-  <section>
-    <h2>🛠️ Modération</h2>
-    <div class="cmd">+bl : Bannir un membre</div>
-    <div class="cmd">+unbl : Débannir un membre</div>
-    <div class="cmd">+lock : Verrouiller un salon</div>
-    <div class="cmd">+unlock : Déverrouiller un salon</div>
-    <div class="cmd">+clear : Supprimer des messages</div>
-    <div class="cmd">+renew : Renouveler un salon</div>
-    <div class="cmd">+close : Fermer un ticket</div>
-    <div class="cmd">+rename : Renommer un ticket</div>
-    <div class="cmd">+banlist : Voir la liste des bans</div>
-    <div class="cmd">+addrole @membre (rôle) : Ajouter un rôle à un membre</div>
-    <div class="cmd">+delrole @membre : Retirer tous les rôles d’un membre</div>
-    <div class="cmd">+warn @membre [raison] : Avertir un membre ou afficher ses sanctions</div>
-    <div class="cmd">+deltwarn @membre : Supprimer le dernier avertissement du membre</div>
-    <div class="cmd">+deltwarnhall : Supprimer tous les avertissements (admin uniquement)</div>
-    <div class="cmd">+mute @membre [raison] [durée]</div>
-    <div class="cmd">+unmute @membre</div>
-    <div class="cmd">+nick @membre</div>
-    <div class="cmd">+voicemoov @membre &lt;ID salon&gt;</div>
-    <div class="cmd">+voicekick @membre</div>
-  </section>
+<div class="scan-line"></div>
 
-  <section>
-    <h2>🧰 Utilitaire</h2>
-    <div class="cmd">+addemoji</div>
-    <div class="cmd">+botinfo</div>
-    <div class="cmd">+roll [max]</div>
-    <div class="cmd">+hug [@membre]</div>
-    <div class="cmd">+kiss [@membre]</div>
-    <div class="cmd">+photo_aleatoire</div>
-    <div class="cmd">+story</div>
-    <div class="cmd">+banner [utilisateur]</div>
-    <div class="cmd">+pdp</div>
-    <div class="cmd">+vc</div>
-    <div class="cmd">+speed</div>
-    <div class="cmd">+music</div>
-    <div class="cmd">+nrj [id_salons]</div>
-    <div class="cmd">+skyrock [id_salons]</div>
-    <div class="cmd">+stopradio</div>
-  </section>
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">ULTRA<span>BOT</span></div>
+  <ul class="nav-links">
+    <li><a href="#antiraid">Antiraid</a></li>
+    <li><a href="#commandes">Commandes</a></li>
+    <li><a href="#commandes">164 cmds</a></li>
+  </ul>
+  <div class="nav-badge"><span class="live-dot"></span>EN LIGNE</div>
+</nav>
 
-  <section>
-    <h2>🎟️ Ticket</h2>
-    <div class="cmd">+ticket</div>
-  </section>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-eyebrow">Discord Bot — Version Avancee</div>
+  <h1 class="hero-title" data-text="ULTRABOT">ULTRA<span class="red">BOT</span></h1>
+  <p class="hero-sub">Le bot Discord ultime — Moderation, Antiraid, Utilitaires, Jeux et bien plus.</p>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">164</div>
+      <div class="stat-label">Commandes</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">8</div>
+      <div class="stat-label">Categories</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">&lt;100</div>
+      <div class="stat-label">Ms Antiraid</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">24/7</div>
+      <div class="stat-label">En ligne</div>
+    </div>
+  </div>
+  <div class="hero-cta">
+    <a href="#commandes" class="btn-primary">Voir les commandes</a>
+    <a href="#antiraid" class="btn-outline">Antiraid</a>
+  </div>
+</section>
 
-  <section>
-    <h2>🔧 Owner (1/2)</h2>
-    <div class="cmd">filteradd &lt;mot&gt;</div>
-    <div class="cmd">+filterremove</div>
-    <div class="cmd">+filterlist</div>
-    <div class="cmd">giveway</div>
-    <div class="cmd">+say</div>
-    <div class="cmd">+gg</div>
-    <div class="cmd">+lrm &lt;role&gt;</div>
-    <div class="cmd">+boosters</div>
-    <div class="cmd">+namebot &lt;nom&gt;</div>
-    <div class="cmd">+setpic &lt;url&gt;</div>
-    <div class="cmd">+wl</div>
-    <div class="cmd">+unwl</div>
-    <div class="cmd">+antilien</div>
-    <div class="cmd">+log</div>
-    <div class="cmd">+invisible</div>
-    <div class="cmd">+blockinvite</div>
-    <div class="cmd">• on / off / max</div>
-  </section>
+<div class="divider"></div>
 
-  <section>
-    <h2>🔧 Owner (2/2)</h2>
-    <div class="cmd">+wl_liste</div>
-    <div class="cmd">+servinfo</div>
-    <div class="cmd">+listrole</div>
-    <div class="cmd">+hide &lt;id_salon&gt;</div>
-    <div class="cmd">+unhide &lt;id_salon&gt;</div>
-    <div class="cmd">+hideall</div>
-    <div class="cmd">+unhideall</div>
-    <div class="cmd">+slowmode &lt;#salon&gt; &lt;secondes&gt;</div>
-    <div class="cmd">+temprole &lt;@membre&gt; &lt;@role&gt; &lt;durée&gt;</div>
-    <div class="cmd">+untemprole &lt;@membre&gt; &lt;@role&gt;</div>
-    <div class="cmd">+adminlist</div>
-    <div class="cmd">+antibot &lt;on|off|max&gt;</div>
-    <div class="cmd">+joinrole @rôle</div>
-    <div class="cmd">+massiverole @rôle</div>
-    <div class="cmd">+massiveremove @rôle</div>
-     <div class="cmd">+antiban  sert a bloquer les ban en ca de raid</div>
-  </section>
+<!-- ANTIRAID SECTION -->
+<section class="antiraid-section" id="antiraid">
+  <div class="section-label">Protection en temps reel</div>
+  <h2 class="section-title">ANTI<span class="accent">RAID</span></h2>
+  <div class="antiraid-grid">
+    <div class="antiraid-text">
+      <p>UltraBot integre un systeme antiraid de derniere generation. Chaque action suspecte — qu'il s'agisse d'un ban massif, de la creation de salons ou de l'ajout de roles — declenche une reaction instantanee du bot.</p>
+      <p>Si un membre non-whitelisté tente de bannir, kick, creer un salon, ajouter ou retirer un role, supprimer des channels ou spammer, le bot intervient immediatement : la sanction configuree est appliquee en moins de <strong style="color:var(--white)">100 millisecondes</strong>. Zero delai. Zero compromis.</p>
+      <p>Le systeme de whitelist garantit que les membres de confiance ne sont jamais bloques, tandis que les intrus sont neutralises avant d'avoir le temps de causer le moindre dommage.</p>
+      <div class="speed-badge">
+        <div>
+          <div class="ms">&lt;100</div>
+          <div class="ms-label">Millisecondes</div>
+        </div>
+        <div style="color:var(--text-dim);font-family:'Rajdhani',sans-serif;font-size:14px;line-height:1.5;padding-left:16px;border-left:1px solid var(--border)">
+          Detection et application de la punition<br>avant que quoi que ce soit de plus ne puisse se produire.
+        </div>
+      </div>
+    </div>
+    <div class="antiraid-features">
+      <div class="ar-feature">
+        <span class="ar-feature-tag">100ms</span>
+        <div class="ar-feature-name">+antiban</div>
+        <div class="ar-feature-desc">Detecte et annule tout ban massif. La punition tombe avant que la liste des bannis ne soit affectee.</div>
+      </div>
+      <div class="ar-feature">
+        <span class="ar-feature-tag">100ms</span>
+        <div class="ar-feature-name">+antibot</div>
+        <div class="ar-feature-desc">Empeche l'ajout de nouveaux bots non autorises. Tout bot non whitelist est immediatement expulse.</div>
+      </div>
+      <div class="ar-feature">
+        <span class="ar-feature-tag">100ms</span>
+        <div class="ar-feature-name">+antichannel</div>
+        <div class="ar-feature-desc">Reagit en moins de 100ms si un salon est cree ou supprime de maniere suspecte.</div>
+      </div>
+      <div class="ar-feature">
+        <span class="ar-feature-tag">100ms</span>
+        <div class="ar-feature-name">+antirole</div>
+        <div class="ar-feature-desc">Surveille les modifications de roles. Si un membre non-wl ajoute ou retire un role, la punition s'applique instantanement.</div>
+      </div>
+      <div class="ar-feature">
+        <span class="ar-feature-tag">100ms</span>
+        <div class="ar-feature-name">+antikick</div>
+        <div class="ar-feature-desc">Protege contre les kicks massifs. Le coupable est sanctionne avant de pouvoir continuer.</div>
+      </div>
+      <div class="ar-feature">
+        <span class="ar-feature-tag">100ms</span>
+        <div class="ar-feature-name">+antispam / +antilink / +antiping</div>
+        <div class="ar-feature-desc">Neutralise le spam, les liens malveillants et les pings abusifs en temps reel sans intervention manuelle.</div>
+      </div>
+      <div class="ar-feature">
+        <span class="ar-feature-tag">100ms</span>
+        <div class="ar-feature-name">+antiwebhook / +antiupdate / +antivanity</div>
+        <div class="ar-feature-desc">Protege les webhooks, les parametres du serveur et le lien vanity contre toute modification non autorisee.</div>
+      </div>
+      <div class="ar-feature">
+        <span class="ar-feature-tag">Captcha</span>
+        <div class="ar-feature-name">+wiki (Verification captcha)</div>
+        <div class="ar-feature-desc">Cree un embed avec captcha distordu pour la verification des nouveaux membres avant l'attribution de roles.</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <section>
-    <h2>🛡️ Soutien</h2>
-    <div class="cmd">+soutien</div>
-  </section>
+<div class="divider"></div>
 
-  <section>
-    <h2>🔁 Redémarrage</h2>
-    <div class="cmd">+rdm</div>
-  </section>
+<!-- COMMANDS SECTION -->
+<section class="commands-section" id="commandes">
+  <div class="commands-header">
+    <div>
+      <div class="section-label">Toutes les fonctionnalites</div>
+      <h2 class="section-title">COMMA<span class="accent">NDES</span></h2>
+    </div>
+    <div class="commands-count">Total — <span>164</span> commandes</div>
+  </div>
 
-  <section>
-    <h2>📋 Logs</h2>
-    <div class="cmd">+logs</div>
-  </section>
+  <div class="search-wrap">
+    <span class="search-icon">&#128269;</span>
+    <input type="text" class="cmd-search" placeholder="Rechercher une commande..." id="searchInput">
+  </div>
 
-  <p><strong>🤖 Ce bot possède 75 commandes.<br>📌 SnowBot - développé par Mayzoxe</strong></p>
+  <div class="tabs" id="tabBar"></div>
 
-  <footer>&copy; 2025 Mayzoxe</footer>
+  <div id="tab-utilitaires" class="tab-panel active">
+    <div class="cat-desc">Pour avoir de l'aide sur une commande : <code>+help &lt;commande&gt;</code> — <code>&lt;...&gt;</code> = obligatoire · <code>[...]</code> = facultatif</div>
+    <div class="cmd-grid" id="grid-utilitaires"></div>
+  </div>
+
+  <div id="tab-moderation" class="tab-panel">
+    <div class="cat-desc">Pour avoir de l'aide sur une commande : <code>+help &lt;commande&gt;</code> — <code>&lt;...&gt;</code> = obligatoire · <code>[...]</code> = facultatif</div>
+    <div class="cmd-grid" id="grid-moderation"></div>
+  </div>
+
+  <div id="tab-antiraid" class="tab-panel">
+    <div class="cat-desc">Pour avoir de l'aide sur une commande : <code>+help &lt;commande&gt;</code> — <code>&lt;...&gt;</code> = obligatoire · <code>[...]</code> = facultatif</div>
+    <div class="cmd-grid" id="grid-antiraid"></div>
+  </div>
+
+  <div id="tab-logs" class="tab-panel">
+    <div class="cat-desc">Pour avoir de l'aide sur une commande : <code>+help &lt;commande&gt;</code> — <code>&lt;...&gt;</code> = obligatoire · <code>[...]</code> = facultatif</div>
+    <div class="cmd-grid" id="grid-logs"></div>
+  </div>
+
+  <div id="tab-jeux" class="tab-panel">
+    <div class="cat-desc">Pour avoir de l'aide sur une commande : <code>+help &lt;commande&gt;</code> — <code>&lt;...&gt;</code> = obligatoire · <code>[...]</code> = facultatif</div>
+    <div class="cmd-grid" id="grid-jeux"></div>
+  </div>
+
+  <div id="tab-contact" class="tab-panel">
+    <div class="cat-desc">Pour avoir de l'aide sur une commande : <code>+help &lt;commande&gt;</code> — <code>&lt;...&gt;</code> = obligatoire · <code>[...]</code> = facultatif</div>
+    <div class="cmd-grid" id="grid-contact"></div>
+  </div>
+
+  <div id="tab-parametres" class="tab-panel">
+    <div class="cat-desc">Pour avoir de l'aide sur une commande : <code>+help &lt;commande&gt;</code> — <code>&lt;...&gt;</code> = obligatoire · <code>[...]</code> = facultatif</div>
+    <div class="cmd-grid" id="grid-parametres"></div>
+  </div>
+
+  <div id="tab-informations" class="tab-panel">
+    <div class="cat-desc">Pour avoir de l'aide sur une commande : <code>+help &lt;commande&gt;</code> — <code>&lt;...&gt;</code> = obligatoire · <code>[...]</code> = facultatif</div>
+    <div class="cmd-grid" id="grid-informations"></div>
+  </div>
+
+  <div id="tab-gestions" class="tab-panel">
+    <div class="cat-desc">Pour avoir de l'aide sur une commande : <code>+help &lt;commande&gt;</code> — <code>&lt;...&gt;</code> = obligatoire · <code>[...]</code> = facultatif</div>
+    <div class="cmd-grid" id="grid-gestions"></div>
+  </div>
+
+  <div class="no-results" id="noResults">Aucune commande trouvee pour cette recherche.</div>
+</section>
+
+<footer>
+  <div class="footer-logo">ULTRA<span>BOT</span></div>
+  <div class="footer-text">
+    164 COMMANDES · 8 CATEGORIES<br>
+    &lt;100MS ANTIRAID · DISCORD BOT
+  </div>
+</footer>
+
+<script>
+const DATA = {
+  utilitaires: [
+    ["+boostembed <#salon/off>", "Configure le salon ou envoyer les messages de boost"],
+    ["+calc <calcul>", "Permet de faire un calcul simple"],
+    ["+createwb <nom>", "Cree un webhook dans le salon actuel"],
+    ["+custom", "Gere les commandes personnalisees"],
+    ["+embed", "Permet de creer un embed"],
+    ["+emoji <emoji>", "Permet de creer un emoji"],
+    ["+fivem", "Configurer le bot pour streamer le serveur FiveM"],
+    ["+gend <messageId>", "Permet de terminer un giveaway"],
+    ["+ggall", "Affiche le statut personnalise des membres d'un role"],
+    ["+ghostping <#1,#etc>", "Permet de configurer le ghostping"],
+    ["+greroll <messageId>", "Permet de prendre un nouveau gagnant pour un giveaway"],
+    ["+gstart <duree> <gagnant> <prix>", "Permet de creer un giveaway"],
+    ["+joindm", "Gere le message de bienvenue en DM"],
+    ["+joinrole <@role/off>", "Permet de configurer un role automatique a l'arrivee"],
+    ["+say <message>", "Permet de faire repeter un message"],
+    ["+setconfess <salon/off>", "Permet de configurer le salon de confession"],
+    ["+setjoin <salon/off> <message>", "Permet de configurer un message de bienvenue"],
+    ["+setsuggest <salon/off>", "Permet de configurer le salon de suggestions"],
+    ["+steal <emoji/lien> [nom]", "Recupere un emoji d'un autre serveur pour l'ajouter ici"],
+    ["+snipe", "Permet d'afficher le dernier message qui a ete supprime"],
+    ["+soutien <clear/role> <texte>", "Permet de configurer le soutien"],
+    ["+status <IP> <PORT> <connect>", "Affiche le statut complet du serveur FiveM"],
+    ["+streame <message>", "Mettre un message en streaming sur Discord"],
+    ["+support", "Permet de rejoindre le serveur support de Ultrabot"],
+    ["+tempvoc <off/salon> <categorie>", "Permet de configurer le salon vocal temporaire"],
+    ["+test", "Commande de test"],
+    ["+variable", "Permet d'afficher les variables pour le message de bienvenue"],
+    ["+voicemove <@mention/id>", "Permet de deplacer un membre de vocal"],
+  ],
+  moderation: [
+    ["+addrole <mention/id> <@role/id|nom>", "Ajoute un role a un membre"],
+    ["+altscan", "Liste les comptes crees il y a moins de 50 jours"],
+    ["+antiping", "Gere la protection anti-ping (add, remove, list)"],
+    ["+ban <mention/id> <raison>", "Permet de bannir un membre"],
+    ["+blackliste", "Affiche la liste complete des personnes blacklistees sur TOUS les serveurs"],
+    ["+bl <mention/id> [raison]", "Permet de blacklister un membre"],
+    ["+clear [nombre]", "Permet de supprimer le nombre de messages donne"],
+    ["+clearall", "Supprime tous les messages du salon sans le recreer"],
+    ["+delallsanction <mention/id>", "Permet d'effacer toutes les sanctions d'un membre"],
+    ["+delrole <mention/id> <@role/id>", "Retire un role a un membre"],
+    ["+delsanction <mention/id> <nombre>", "Permet de retirer la sanction d'un membre"],
+    ["+demote <mention/id> <raison>", "Retire tous les roles d'un membre sauf le role conserve"],
+    ["+derank <mention/id> <raison>", "Permet de derank un membre"],
+    ["+forceban <id> [raison]", "Bannit une personne meme si elle n'est pas sur le serveur"],
+    ["+ghostjoin", "Configure ou desactive le ghost ping a l'arrivee d'un membre"],
+    ["+hide", "Cache le salon actuel"],
+    ["+kick <mention/id> <raison>", "Permet de kick un membre"],
+    ["+lock [salon]", "Permet de verrouiller un salon"],
+    ["+massiverole <@role/ID>", "Ajoute un role a tous les membres du serveur"],
+    ["+mute <mention/id> [1s/1m/1h/1d]", "Mute un membre"],
+    ["+nick <@membre> <nouveau pseudo>", "Change le surnom d'un membre sur le serveur"],
+    ["+piconly <#salon>", "Permet de definir un salon pour le piconly"],
+    ["+prune <@membre> <nombre>", "Supprime un nombre X de messages d'un utilisateur specifique"],
+    ["+renew [salon]", "Permet de recreer un salon"],
+    ["+sanction [mention/id]", "Permet de voir la liste des sanctions d'un membre"],
+    ["+slowmode", "Definit le slowmode d'un salon"],
+    ["+softban <@user> [raison]", "Bannit et debannit un membre pour supprimer ses messages"],
+    ["+temprole <@user> <@role> <temps>", "Donne un role temporaire a un membre"],
+    ["+unban <id>", "Permet de unban"],
+    ["+unbanall", "Permet de debannir tout le monde"],
+    ["+unbl <mention/id> [raison]", "Permet de retirer un membre de la blacklist et de le debannir"],
+    ["+unhide", "Rend le salon actuel visible"],
+    ["+unlock [salon]", "Permet de deverrouiller un salon"],
+    ["+unmassiverole <@role/ID>", "Retire un role a tous les membres du serveur"],
+    ["+unmute <mention/id>", "Retire le timeout d'un membre"],
+    ["+untemprole <@user> <@role>", "Retire un role temporaire"],
+    ["+vmute <mention/id> <duree> <raison>", "Permet de mute une personne en vocal"],
+    ["+warn <mention/id> <raison>", "Permet de sanctionner un membre"],
+  ],
+  antiraid: [
+    ["+antiban", "Active/desactive l'antiban"],
+    ["+antibot", "Active/desactive l'antibot"],
+    ["+antichannel", "Active/desactive l'antichannel"],
+    ["+antieveryone", "Active/desactive l'antieveryone"],
+    ["+antikick", "Active/desactive l'antikick"],
+    ["+antilink", "Active ou desactive l'antilink"],
+    ["+antirole", "Active/desactive l'antirole"],
+    ["+antispam", "Active ou desactive l'antispam"],
+    ["+antiupdate", "Active/desactive l'antiupdate"],
+    ["+antivanity", "Active/desactive l'antivanity"],
+    ["+antiwebhook", "Active/desactive l'antiwebhook"],
+    ["+creation", "Configure la limite d'age de creation des comptes (Anti-Raid)"],
+    ["+protect", "Permet d'afficher l'antiraid"],
+    ["+punish", "Permet de gerer les sanctions pour l'antiraid"],
+    ["+wiki @role_a_retirer @role_a_ajouter", "Cree un embed interactif avec captcha distordu pour ajouter/enlever un role"],
+  ],
+  logs: [
+    ["+boostlog [off]", "Active/desactive les logs boosts"],
+    ["+messagelog [off]", "Active/desactive les logs messages"],
+    ["+modlog [off]", "Active/desactive les logs de moderation"],
+    ["+presetlogs [off]", "Active/desactive les logs predefinis"],
+    ["+raidlog [off]", "Active/desactive les logs raid"],
+    ["+rolelog [off]", "Active/desactive les logs role"],
+    ["+ticketlog [off]", "Active/desactive les logs ticket"],
+    ["+voicelog [off]", "Active/desactive les logs vocals"],
+  ],
+  jeux: [
+    ["+2048", "Permet de jouer au 2048"],
+    ["+8ball", "Pose une question a la boule magique"],
+    ["+catsay", "Fait parler un chat"],
+    ["+christmas", "Jours restants avant Noel"],
+    ["+claque", "Donne une claque a quelqu'un"],
+    ["+demineur", "Jouer au demineur"],
+    ["+dilemme", "Choix impossible"],
+    ["+epicgamer", "Evalue ton pourcentage de gamer epique"],
+    ["+fasttype", "Jeu de vitesse de frappe"],
+    ["+findemoji", "Trouver l'emoji cache"],
+    ["+flood", "Jouer au jeu Flood — unifiez la grille en moins de 22 coups"],
+    ["+guesspokemon", "Trouver le Pokemon cache"],
+    ["+halloween", "Jours restants avant Halloween"],
+    ["+image", "Recherche des images"],
+    ["+kiss", "Faire un bisou a quelqu'un"],
+    ["+loading", "Affiche une barre de chargement"],
+    ["+memory", "Jeu de memoire d'emojis"],
+    ["+morpion", "Permet de jouer au morpion"],
+    ["+pendu", "Permet de jouer au jeu du pendu"],
+    ["+pfc", "Jouer a Pierre-Feuille-Ciseaux contre le bot ou un joueur"],
+    ["+puissance4", "Jouer au Puissance 4 contre le bot ou un joueur"],
+    ["+qrcode", "Genere un QR code"],
+    ["+question", "Pose une question et obtient une reponse realiste"],
+    ["+rickroll", "Never gonna give you up"],
+    ["+slot", "Jouer a la machine a sous"],
+    ["+snake", "Permet de jouer au snake"],
+    ["+trivia", "Quiz de culture generale"],
+  ],
+  contact: [
+    ["+add <mention/id>", "Permet d'ajouter une personne au ticket"],
+    ["+close", "Ferme le ticket et envoie le transcript HTML"],
+    ["+remove <mention/id>", "Permet de retirer une personne du ticket"],
+    ["+rename <message>", "Permet de renommer un ticket"],
+    ["+ticket <categorie id>", "Permet de configurer les tickets"],
+  ],
+  parametres: [
+    ["+clearwb", "Supprime tous les webhooks du serveur"],
+    ["+delcommand [perms] [commande]", "Permet de retirer une commande d'une ou plusieurs permissions"],
+    ["+delperm [perms] [role]", "Permet de retirer un role d'une permission"],
+    ["+mp <@membre/ID> <message>", "Permet d'envoyer un message prive a un membre via le bot"],
+    ["+owner", "Permet de voir la liste des owner"],
+    ["+perms", "Permet de gerer les permissions"],
+    ["+prefix", "Permet de changer le prefixe"],
+    ["+say <message>", "Permet de faire parler le bot"],
+    ["+setcolor", "Permet de changer la couleur des embed"],
+    ["+setcommand [perms] [commande]", "Permet d'ajouter plusieurs commandes a une ou plusieurs permissions"],
+    ["+setowner [mention/id]", "Permet d'ajouter des owners"],
+    ["+setperm [perms] [role]", "Permet d'ajouter une permission a un role"],
+    ["+setpublic <on/off>", "Active ou desactive les commandes publiques"],
+    ["+unowner <mention/id>", "Permet de retirer un utilisateur de la liste des owners"],
+    ["+unwhitelist <mention/id>", "Permet de retirer un utilisateur de la whitelist"],
+    ["+whitelist [mention/id]", "Permet de gerer la whitelist"],
+  ],
+  informations: [
+    ["+alladmins", "Permet d'afficher la liste des administrateurs"],
+    ["+allbans", "Permet de voir la liste des membres bannis"],
+    ["+allbots", "Permet de voir la liste des bots"],
+    ["+banner [mention/id]", "Permet d'afficher la banniere d'une personne"],
+    ["+boosters", "Permet de voir la liste des boosters"],
+    ["+botinvite", "Permet d'inviter le bot sur votre serveur"],
+    ["+commande", "Affiche toutes les commandes du bot"],
+    ["+help", "Permet d'afficher la liste des commandes"],
+    ["+helpall", "Permet d'afficher la liste des commandes par permissions"],
+    ["+invite", "Affiche le nombre d'invitations reelles via la DB"],
+    ["+lrm", "Affiche la liste des roles du serveur avec leurs IDs"],
+    ["+pic [mention/id]", "Permet d'afficher la photo de profil d'une personne"],
+    ["+ping", "Permet d'afficher la latence du bot"],
+    ["+roleinfo <mention/id>", "Affiche des informations sur un role"],
+    ["+rolemembers <mention/id>", "Permet d'afficher un role avec ses membres"],
+    ["+serverbanner", "Affiche la banniere du serveur"],
+    ["+serverinfo", "Affiche les informations du serveur"],
+    ["+serverlist", "Affiche la liste des serveurs ou se trouve le bot"],
+    ["+serverpic", "Affiche l'icone du serveur"],
+    ["+userinfo [mention/id]", "Permet d'afficher des informations sur un membre du serveur"],
+    ["+vc", "Permet d'afficher les statistiques du serveur"],
+  ],
+  gestions: [
+    ["+activity <listen/play/stream/watch/compet/custom/stop> [texte]", "Permet de changer l'activite du bot"],
+    ["+avatar <url>", "Permet de changer la photo de profil du bot"],
+    ["+botbanner", "Change la banniere du bot"],
+    ["+leave <serverId>", "Permet de quitter un serveur"],
+    ["+name <texte>", "Permet de changer le nom"],
+    ["+presence <online/idle/dnd/invisible>", "Permet de changer le statut du bot"],
+    ["+version", "Permet d'afficher la version du bot"],
+  ],
+};
+
+const CAT_LABELS = {
+  utilitaires: 'Utilitaires',
+  moderation: 'Moderation',
+  antiraid: 'Antiraid',
+  logs: 'Logs',
+  jeux: 'Jeux',
+  contact: 'Contact',
+  parametres: 'Parametres',
+  informations: 'Informations',
+  gestions: 'Gestions',
+};
+
+// Build grids + tab buttons
+const tabBar = document.getElementById('tabBar');
+let firstTab = true;
+Object.entries(DATA).forEach(([cat, cmds]) => {
+  // Tab button
+  const btn = document.createElement('button');
+  btn.className = 'tab-btn' + (firstTab ? ' active' : '');
+  btn.dataset.tab = cat;
+  btn.innerHTML = `${CAT_LABELS[cat]}<span class="tab-count">${cmds.length} commande${cmds.length > 1 ? 's' : ''}</span>`;
+  tabBar.appendChild(btn);
+
+  // Grid cards
+  const grid = document.getElementById('grid-' + cat);
+  if (!grid) return;
+  cmds.forEach(([name, desc]) => {
+    const card = document.createElement('div');
+    card.className = 'cmd-card';
+    card.dataset.name = name.toLowerCase();
+    card.dataset.desc = desc.toLowerCase();
+    card.innerHTML = `<div class="cmd-name">${name}</div><div class="cmd-desc">${desc}</div>`;
+    grid.appendChild(card);
+  });
+  firstTab = false;
+});
+
+// Tabs
+tabBar.addEventListener('click', e => {
+  const btn = e.target.closest('.tab-btn');
+  if (!btn) return;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  document.getElementById('searchInput').value = '';
+  document.querySelectorAll('.cmd-card').forEach(c => c.style.display = '');
+  document.getElementById('noResults').style.display = 'none';
+});
+
+// Search
+document.getElementById('searchInput').addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  let total = 0;
+
+  if (q === '') {
+    // Show all in active tab, restore tabs
+    document.querySelectorAll('.tab-btn').forEach(b => b.style.display = '');
+    const activeTab = document.querySelector('.tab-btn.active').dataset.tab;
+    document.querySelectorAll('#tab-' + activeTab + ' .cmd-card').forEach(c => {
+      c.style.display = '';
+    });
+    document.getElementById('noResults').style.display = 'none';
+    return;
+  }
+
+  // Search across all tabs: show all panels, filter all cards
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+  // Show all panels temporarily but hide empty ones
+  Object.keys(DATA).forEach(cat => {
+    const panel = document.getElementById('tab-' + cat);
+    const cards = panel.querySelectorAll('.cmd-card');
+    let shown = 0;
+    cards.forEach(card => {
+      const match = card.dataset.name.includes(q) || card.dataset.desc.includes(q);
+      card.style.display = match ? '' : 'none';
+      if (match) shown++;
+    });
+    panel.classList.toggle('active', shown > 0);
+    total += shown;
+  });
+
+  document.getElementById('noResults').style.display = total === 0 ? 'block' : 'none';
+});
+</script>
 </body>
 </html>
